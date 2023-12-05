@@ -1,7 +1,10 @@
+import envLoader from './loadEnv';
+
 const { MongoClient } = require('mongodb');
 
 class DBClient {
   constructor() {
+    envLoader();
     const host = process.env.DB_HOST || 'localhost';
     const port = process.env.DB_PORT || 27017;
     const database = process.env.DB_DATABASE || 'files_manager';
