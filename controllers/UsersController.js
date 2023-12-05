@@ -12,14 +12,17 @@ class UsersController {
 
     const { email, password } = req.body;
 
-    const user = await dbClient.users.findOne({ email });
+    const user = await dbClient.client.db().collection('users').findOne({ email });
 
     if (user) {
       return res.status(400).json({ error: 'Already exist' });
     }
 
     const hashedPassword = sha1(password);
-    const newUser = await dbClient.users.insertOne({ email, password: hashedPassword });
+    const newUser = await dbClient.client.db().collection('users').insertOne({
+      email,
+      password: hashedPassword,
+    });
 
     return res.status(201).json({ email, id: newUser.insertedId });
   }
