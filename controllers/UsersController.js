@@ -1,16 +1,17 @@
-const sha1 = require('sha1');
+import sha1 from 'sha1';
+
 const dbClient = require('../utils/db');
 
 class UsersController {
   static async postNew(req, res) {
-    if (!req.body.email) {
+    const { email, password } = req.body;
+
+    if (!email) {
       return res.status(400).json({ error: 'Missing email' });
     }
-    if (!req.body.password) {
+    if (!password) {
       return res.status(400).json({ error: 'Missing password' });
     }
-
-    const { email, password } = req.body;
 
     const usersCollection = dbClient.client.db().collection('users');
 
