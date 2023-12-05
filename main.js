@@ -20,7 +20,7 @@ const waitConnection = () => {
       await setTimeout(() => {
         i += 1;
         if (i >= 10) {
-          reject();
+          reject(new Error('Unable to establish connection'));
         } else if (!dbClient.isAlive()) {
           repeatFct();
         } else {
@@ -34,7 +34,7 @@ const waitConnection = () => {
 
 (async () => {
   console.log(dbClient.isAlive());
-  await waitConnection();
+  await waitConnection().catch((err) => console.error(err));
   console.log(dbClient.isAlive());
   console.log(await dbClient.nbUsers());
   console.log(await dbClient.nbFiles());
