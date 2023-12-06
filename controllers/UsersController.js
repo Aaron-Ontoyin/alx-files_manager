@@ -1,6 +1,6 @@
 import sha1 from 'sha1';
+import mongoDBCore from 'mongodb/lib/core';
 
-const { ObjectId } = require('mongodb');
 const dbClient = require('../utils/db');
 const redisClient = require('../utils/redis');
 
@@ -36,7 +36,7 @@ class UsersController {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const user = await dbClient.client.db().collection('users').findOne({ _id: ObjectId(userId) });
+    const user = await dbClient.client.db().collection('users').findOne({ _id: mongoDBCore.BSON.ObjectId(userId) });
     if (!user) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
