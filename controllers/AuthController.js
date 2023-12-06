@@ -1,5 +1,6 @@
+import sha1 from 'sha1';
+
 const uuid = require('uuid');
-const crypto = require('crypto');
 const dbClient = require('../utils/db');
 const redisClient = require('../utils/redis');
 
@@ -11,13 +12,10 @@ class AuthController {
     }
 
     const [email, password] = Buffer.from(authorization.split(' ')[1], 'base64').toString().split(':');
-    const sha1password = crypto.createHash('sha1').update(password).digest('hex');
+    const sha1password = sha1(password);
 
-    const user = await dbClient.client.db().collection('users').findOne({
-      email,
-      password: sha1password,
-    });
-    if (!user) {
+    const user = await dbClient.client.db().collection('users').findOne({ email });
+    if (!user || sha1password !== user.password) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
 
