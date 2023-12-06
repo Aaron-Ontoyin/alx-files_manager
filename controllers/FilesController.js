@@ -63,7 +63,6 @@ class FilesController {
     const buffer = Buffer.from(data, 'base64');
     await fs.promises.writeFile(localPath, buffer);
 
-    console.log(fileDocument);
     const result = await dbClient.client.db().collection('files').insertOne({ ...fileDocument, localPath });
     fileDocument.id = result.insertedId;
     return res.status(201).json(fileDocument);
