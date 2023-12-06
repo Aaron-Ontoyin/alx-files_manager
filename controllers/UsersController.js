@@ -24,7 +24,7 @@ class UsersController {
 
     const newUser = await usersCollection.insertOne({ email, password: sha1(password) });
 
-    return res.status(201).json({ email, id: newUser.insertedId.toString() });
+    return res.status(201).json({ id: newUser.insertedId.toString(), email });
   }
 
   static async getMe(req, res) {
